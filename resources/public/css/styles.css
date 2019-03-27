@@ -1,0 +1,35 @@
+body {
+    font-size: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    /* 1 */
+    margin: 40px;
+  }
+  
+  .button {
+  margin-left: 10px;
+  }
+  
+  .likeQuora {
+      margin-top:2em;
+      width:60%;
+      font-size: 25px;
+      font-family: monospace;
+  }
+  
+  table.code {
+  
+  width: 70%;
+  }
+  
+  td {
+  width: 2%;}
+  
+  td.code-col {
+  width: 70%;}
+  
+  td.res-col {
+  width: 20%;}
+  
+  tr:nth-child(even) {background: #ede}
+  tr:nth-child(odd) {background: #FFF}
+  tr.thead { background: #ede; padding: 5px; }
