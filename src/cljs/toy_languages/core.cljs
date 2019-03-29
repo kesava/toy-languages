@@ -55,7 +55,7 @@
              :cols 50
              :on-change #(reset! value (-> % .-target .-value))}])
 
-(def editor-vector (reagent/atom (into [] (doall (map #(str "") (range 10))))))
+(def editor-vector (reagent/atom (into ["(define x 3)" "(plus x 8)"] (doall (map #(str "") (range 8))))))
 (def result-vector (reagent/atom (into [] (doall (map #(str "") (range 10))))))
 
 (defn editor-table

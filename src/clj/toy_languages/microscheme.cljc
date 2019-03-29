@@ -4,33 +4,50 @@
 (def car first)
 (def cdr rest)
 
-(defn ms-keyword? [keyw]
-          (cond
-            (= keyw 'lambda) true
-            (= keyw 'quote) true
-            (= keyw 'if) true
-            :else false))
+(defn keyword? [keyw]
+  (cond
+    (= keyw 'lambda) true
+    (= keyw 'quote) true
+    (= keyw 'if) true
+    :else false))
 
 (defn name? [arg]
-          (cond
-            (ms-keyword? arg) false
-            (symbol? arg) true
-            :else false))
+  (cond
+    (keyword? arg) false
+    (symbol? arg) true
+    :else false))
 
 (declare syntax-ok?)
 
 (defn matches?
-          [pattern pmse]
-          (cond
-            (= (car pattern) (car pmse)) (= (count (cdr pattern)) (count (cdr pmse)))
-            (and (= pattern '(...)) (list? pmse)) true
-            :else false))
+  [pattern pmse]
+  (cond
+    (= (car pattern) (car pmse)) (= (count (cdr pattern)) (count (cdr pmse)))
+    (and (= pattern '(...)) (list? pmse)) true
+    :else false))
 
 (defn substitutions-in-to-match
-          [pattern [operator & rst :as pmse]]
-          (cond
-            (= (car pattern) operator) rst
-            :else (cons pmse '())))
+  [pattern [operator & rst :as pmse]]
+  (cond
+    (= (car pattern) operator) rst
+    :else (cons pmse '())))
+(defn parse-loop [pmse pa]
+  (loop [[[pattern action] & rst :as p-a-list] pa]
+    (cond
+      (empty? p-a-list) false
+      (matches? pattern pmse) (apply action (substitutions-in-to-match pattern pmse))
+      :else (recur rst))))
+
+(defn parse
+  [expression]
+  (cond
+    (name? expression) (make-name-ast expression)
+    (or (number? expression)
+        (string? expression)
+        (boolean? expression)) (make-constant-ast expression)
+    (list? expression) (parse-loop expression)
+    :else (str "Not a valid expression")))
+
 
 (def micro-scheme-syntax-ok?-p-a-list
   [
@@ -53,22 +70,17 @@
 
 ;; convert to reduce / fold
 
-(defn parse-loop [pmse pa]
-          (loop [[[pattern action] & rst :as p-a-list] pa]
-            (cond
-              (empty? p-a-list) false
-              (matches? pattern pmse) (apply action (substitutions-in-to-match pattern pmse))
-              :else (recur rst))))
+
 
 (defn syntax-ok? [pmse]
-          (cond
-            (or (number? pmse)
-                (string? pmse)
-                ;(boolean? pmse)
-                (empty? pmse)) true
-            (name? pmse) true
-            (list? pmse) (parse-loop pmse micro-scheme-syntax-ok?-p-a-list)
-            :else false))
+  (cond
+    (or (number? pmse)
+        (string? pmse)
+        ;(boolean? pmse)
+        (empty? pmse)) true
+    (name? pmse) true
+    (list? pmse) (parse-loop pmse micro-scheme-syntax-ok?-p-a-list)
+    :else false))
 
 
 ;(syntax-ok? '(if ('< 2 3) 2 3))

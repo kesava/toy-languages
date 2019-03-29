@@ -6,7 +6,7 @@ A single page application designed to demonstrate a few toy langauges.
 * Dream Language from The Schematics of Computation by Vincent Manis
 * Nightmare Langauge from The Schematics of Computation
 
-The app is now live at `http://kesava.github.io/toy-languages
+The app is now live at http://kesava.github.io/toy-languages
 
 ## Workflow
 
